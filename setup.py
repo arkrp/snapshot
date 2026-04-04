@@ -5,6 +5,6 @@ setup(name="snapshot",
     packages=find_packages(),
     zip_safe=False,
     entry_points={
-        "console_scripts": ['snapshot_script_name=snapshot.snapshot:rawFEED']
+        "console_scripts": ['snapshot=snapshot.snapshot:snapshot']
     }
 )
