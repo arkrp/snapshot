@@ -107,18 +107,20 @@ def snapshot(): #section-start
     #section-end
     #section-start run the tests
     print("\ntests:")
+    all_tests_good = True
     for test_name in tests:
-        snapshot_test(
+        test_success = snapshot_test(
             test_name=test_name,
             computed_value=tests[test_name](),
         )
+        if not test_success:
+            all_tests_good = False
     print()
+    if not all_tests_good:
+        sys.exit(1)
     #section-end
 #section-end
 def snapshot_rereference(): #section-start
-    #section-start run all the tests
-    snapshot()
-    #section-end
     #section-start have user select the test to rereference
     tests=load_tests()
     selected_test = make_selection("Enter the test which you would like to overwrite the reference for: ", tests.keys())
@@ -136,9 +138,6 @@ def snapshot_rereference(): #section-start
     #section-end
 #section-end
 def snapshot_inspect(): #section-start
-    #section-start run all the tests
-    snapshot()
-    #section-end
     #section-start have user select the test to inspect
     tests=load_tests()
     selected_test = make_selection("Enter the test to inspect: ", tests.keys())
