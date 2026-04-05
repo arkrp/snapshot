@@ -82,7 +82,7 @@ def snapshot(): #section-start
     #section-start ensure the test directory exists.
     if not os.path.isdir(TEST_FILE_DIRECTORY):
         print("No tests directory found (are you calling this in the correct location?).")
-        if input("Create template test directory?\n(yes/no): ")=="yes":
+        if make_selection("Create template test directory?\n(y/n): ", ["y","n"])=="y":
             #section-start create the directory
             print("no test directory not found. performing fist time setup!")
             print("creating test directory")
