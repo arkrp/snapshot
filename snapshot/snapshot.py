@@ -15,6 +15,8 @@ REFERENCE_FILE_SUFFIX = ".reference.txt"
 CURRENT_FILE_SUFFIX = ".current.txt"
 TEST_FILE_DIRECTORY = "./snapshot_tests/"
 TEST_MODULE_FILEPATH = TEST_FILE_DIRECTORY + "snapshot_tests.py"
+FAIL_STRING = "FAIL[X]: "
+PASS_STRING = "PASS[ ]: "
 #section-end
 #section-start define enums
 NO_REFERENCE="NO_REFERENCE"
@@ -40,18 +42,18 @@ def snapshot_test(*, computed_value, test_name): #section-start
     #section-end
     #section-start deal with no previous snapshots existing
     if not os.path.isfile(reference_filename):
-        print("FAIL[x]: "+test_name+"    NO_REFERENCE")
+        print(FAIL_STRING+test_name+"    NO_REFERENCE")
         return(NO_REFERENCE)
     #section-end
     #section-start compare the reference to the current!
     #section-start if they match pass the test!
     if filecmp.cmp(reference_filename, current_filename):
-        print("PASS[ ]: "+test_name)
+        print(PASS_STRING+test_name)
         return(True)
     #section-end
     #section-start if they don't fail the test!
     else:
-        print("FAIL[x]: "+test_name)
+        print(FAIL_STRING+test_name)
         return(False)
     #section-end
     #section-end
@@ -60,9 +62,9 @@ def display_diff(filename1, filename2): #section-start
     subprocess.run(["git", "diff", "--no-index", filename1, filename2])
 #section-end
 def display_file(filename1): #section-start
-    print("File contents: "+filename1+"\n")
+    print("Contents of file: "+filename1+"\n\n```", end="")
     subprocess.run(["cat", filename1])
-    print("\n\nEnd of file "+filename1)
+    print("```\n\nEnd of file "+filename1)
 #section-end
 def load_tests(): #section-start
     #section-start load the tests
