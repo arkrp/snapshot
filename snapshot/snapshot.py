@@ -1,3 +1,4 @@
+#section-start setup
 #section-start import stuff
 import argparse
 import filecmp
@@ -15,6 +16,11 @@ CURRENT_FILE_SUFFIX = ".current.txt"
 TEST_FILE_DIRECTORY = "./snapshot_tests/"
 TEST_MODULE_FILEPATH = TEST_FILE_DIRECTORY + "snapshot_tests.py"
 #section-end
+#section-start define enums
+NO_REFERENCE="NO_REFERENCE"
+#section-end
+#section-end
+#section-start make supporting functions
 def snapshot_test(*, computed_value, test_name): #section-start
     """ #section-start
     tests the computed outputs against existing snapshots.
@@ -34,8 +40,8 @@ def snapshot_test(*, computed_value, test_name): #section-start
     #section-end
     #section-start deal with no previous snapshots existing
     if not os.path.isfile(reference_filename):
-        print("FAIL[x]: "+test_name+"\nprevious test record not found. you need to make a reference test to compare against! to do this; run `si` and then enter the test name to examine the current output. If you find the results satisfactory then use `sr` then enter the test name to set the current output as the reference output for this test.")
-        return(False)
+        print("FAIL[x]: "+test_name+"    NO_REFERENCE")
+        return(NO_REFERENCE)
     #section-end
     #section-start compare the reference to the current!
     #section-start if they match pass the test!
@@ -78,6 +84,8 @@ def make_selection(prompt, items): #section-start
     )
     return(user_input)
 #section-end
+#section-end
+#section-start make commands!
 def snapshot(): #section-start
     #section-start ensure the test directory exists.
     if not os.path.isdir(TEST_FILE_DIRECTORY):
@@ -108,6 +116,7 @@ def snapshot(): #section-start
     #section-start run the tests
     print("\ntests:")
     all_tests_good = True
+    no_reference_flag = False
     for test_name in tests:
         test_success = snapshot_test(
             test_name=test_name,
@@ -115,7 +124,12 @@ def snapshot(): #section-start
         )
         if not test_success:
             all_tests_good = False
+        if test_success==NO_REFERENCE:
+            all_tests_good = False
+            no_reference_flag = True
     print()
+    if no_reference_flag:
+        print("At least one test reference output was not found. you need to make a reference test to compare against! to do this; run `si` and then enter a test name to examine the current output. If you find the current output satisfactory then use `sr` then enter the test name to set the current output as the reference output for this test!\n")
     if not all_tests_good:
         sys.exit(1)
     #section-end
@@ -163,4 +177,5 @@ def snapshot_inspect(): #section-start
         display_diff(reference_filename, current_filename)
     #section-end
     print("inspection complete!")
+#section-end
 #section-end
