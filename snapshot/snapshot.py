@@ -54,9 +54,9 @@ def display_diff(filename1, filename2): #section-start
     subprocess.run(["git", "diff", "--no-index", filename1, filename2])
 #section-end
 def display_file(filename1): #section-start
-    print("File contents: "+filename1+"\n\n")
+    print("File contents: "+filename1+"\n")
     subprocess.run(["cat", filename1])
-    print("\n\nEnd of file "+filename1+"\n")
+    print("\n\nEnd of file "+filename1)
 #section-end
 def load_tests(): #section-start
     #section-start load the tests
@@ -150,18 +150,18 @@ def snapshot_inspect(): #section-start
     #section-end
     #section-start deal with no reference existing
     if not os.path.isfile(reference_filename):
-        print("  no reference exists so only the current output will be displayed")
+        print("no reference exists so only the current output will be displayed")
         display_file(current_filename)
     #section-end
     #section-start deal with passed test
     elif filecmp.cmp(reference_filename, current_filename):
-        print("  the test is passed so only the reference will be displayed")
+        print("the test is passed so only the reference will be displayed")
         display_file(reference_filename)
     #section-end
     #section-start deal with failed test
     else:
-        print("  the test failed so both the reference output and the current output will be opened")
+        print("the test failed so both the reference output and the current output will be opened")
         display_diff(reference_filename, current_filename)
     #section-end
-    print("inspection complete!\n")
+    print("inspection complete!")
 #section-end
